@@ -10,41 +10,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="dark-theme">
+<body>
     <div class="overlay"></div>
     
-    <!-- Popup (القائمة المنبثقة) -->
+    <!-- Popup -->
     <div class="popup-overlay" id="popup-overlay">
         <div class="popup-content">
             <button class="close-popup">
                 <i class="fas fa-times"></i>
             </button>
-            <img src="" alt="" class="popup-image" id="popup-image">
+            
+            <!-- حاوية الصورة مع خلفية بيضاء -->
+            <div class="popup-image-container">
+                <img src="" alt="" class="popup-image" id="popup-image">
+            </div>
+            
             <h3 class="popup-title" id="popup-title"></h3>
             <p class="popup-description" id="popup-description"></p>
             
             <!-- قسم الأحجام (للمشروبات العادية) -->
             <div class="sizes-section" id="sizes-section">
                 <h4>اختر الحجم</h4>
-                <div class="size-options" id="size-options">
-                    <!-- سيتم ملؤها بواسطة JS -->
-                </div>
+                <div class="size-options" id="size-options"></div>
             </div>
             
             <!-- قسم الإسبريسو (للإسبريسو فقط) -->
             <div class="espresso-section" id="espresso-section" style="display: none;">
                 <h4>اختر عدد الشوتات</h4>
-                <div class="espresso-options" id="espresso-options">
-                    <!-- سيتم ملؤها بواسطة JS -->
-                </div>
+                <div class="espresso-options" id="espresso-options"></div>
             </div>
             
             <!-- قسم الإضافات -->
             <div class="addons-section">
-                <h4>الإضافات الاختيارية</h4>
-                <div class="addon-options" id="addon-options">
-                    <!-- سيتم ملؤها بواسطة JS -->
-                </div>
+                <h4>الإضافات</h4>
+                <div class="addon-options" id="addon-options"></div>
             </div>
             
             <!-- السعر النهائي -->
@@ -67,14 +66,12 @@
                 <h1>Lovista café</h1>
             </div>
             <div class="header-controls">
-                <!-- زر تبديل اللغة -->
                 <div class="language-switcher">
-                    <button class="language-btn" id="language-btn" data-lang="ar">
+                    <button class="language-btn">
                         <i class="fas fa-language"></i>
                         <span class="lang-text">EN</span>
                     </button>
                 </div>
-                <!-- زر تبديل الثيم (تم إبقاؤه لكن الثيم الأساسي هو الداكن) -->
                 <div class="theme-toggle">
                     <button id="theme-toggle-btn">
                         <i class="fas fa-sun light-icon"></i>
@@ -88,11 +85,11 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h2 data-ar="تجربة سايبر لمذاق لا ينسى" data-en="A Cyber Experience for an Unforgettable Taste">تجربة سايبر لمذاق لا ينسى</h2>
-                <p data-ar="مشروباتنا المحضرة بتقنيات عصرية تنقلك إلى عالم من النكهات المميزة" data-en="Our modernly prepared drinks transport you to a world of distinctive flavors">مشروباتنا المحضرة بتقنيات عصرية تنقلك إلى عالم من النكهات المميزة</p>
+                <h2>تجربة سايبر لمذاق لا ينسى</h2>
+                <p>مشروباتنا المحضرة بتقنيات عصرية تنقلك إلى عالم من النكهات المميزة</p>
                 <a href="https://www.instagram.com/lovista_cafe_bh?igsh=MTdqOW12am12aDJy" target="_blank" class="btn">
                     <i class="fab fa-instagram"></i>
-                    <span data-ar="تابعنا على إنستغرام" data-en="Follow us on Instagram">تابعنا على إنستغرام</span>
+                    تابعنا على إنستغرام
                 </a>
             </div>
         </div>
@@ -100,105 +97,134 @@
 
     <section class="welcome">
         <div class="container">
-            <h2 data-ar="مرحباً بكم في <span>Lovista café</span>" data-en="Welcome to <span>Lovista café</span>">مرحباً بكم في <span>Lovista café</span></h2>
-            <p data-ar="في عالمنا السايبر، نخلق لكم تجربة فريدة تجمع بين تكنولوجيا التحضير وفن النكهات" data-en="In our cyber world, we create a unique experience combining preparation technology and the art of flavors">في عالمنا السايبر، نخلق لكم تجربة فريدة تجمع بين تكنولوجيا التحضير وفن النكهات</p>
+            <h2>مرحباً بكم في <span>Lovista café</span></h2>
+            <p>في عالمنا السايبر، نخلق لكم تجربة فريدة تجمع بين تكنولوجيا التحضير وفن النكهات</p>
         </div>
     </section>
 
     <section class="menu">
         <div class="container">
             <div class="menu-header">
-                <h2 data-ar="المشروبات المميزة" data-en="Signature Drinks">المشروبات المميزة</h2>
+                <h2>المشروبات المميزة</h2>
                 <div class="menu-filter">
-                    <button class="filter-btn active" data-filter="all" data-ar="الكل" data-en="All">الكل</button>
-                    <button class="filter-btn" data-filter="hot" data-ar="ساخنة" data-en="Hot">ساخنة</button>
-                    <button class="filter-btn" data-filter="cold" data-ar="باردة" data-en="Cold">باردة</button>
-                    <button class="filter-btn" data-filter="tea" data-ar="شاي" data-en="Tea">شاي</button>
+                    <button class="filter-btn active" data-filter="all">الكل</button>
+                    <button class="filter-btn" data-filter="hot">ساخنة</button>
+                    <button class="filter-btn" data-filter="cold">باردة</button>
+                    <button class="filter-btn" data-filter="tea">شاي</button>
                 </div>
             </div>
 
             <div class="menu-items">
                 <!-- المشروبات الساخنة -->
                 <div class="menu-category">
-                    <h3 data-ar="المشروبات الساخنة" data-en="Hot Drinks">المشروبات الساخنة</h3>
+                    <h3>المشروبات الساخنة</h3>
                     <div class="menu-grid">
-                        <!-- اسبريسو (ID: espresso) -->
-                        <div class="menu-item" data-id="espresso" data-category="hot">
+                        <div class="menu-item" data-category="hot">
                             <div class="menu-item-image">
                                 <img src="espresso.jpg" alt="اسبريسو">
                             </div>
                             <div class="menu-item-info">
-                                <h4 data-ar="اسبريسو" data-en="Espresso">اسبريسو</h4>
-                                <p data-ar="قهوة مركزة بنكهة قوية" data-en="Concentrated coffee with a strong flavor">قهوة مركزة بنكهة قوية</p>
+                                <h4>اسبريسو</h4>
+                                <p>قهوة مركزة بنكهة قوية</p>
                                 <div class="menu-item-footer">
                                     <span class="price">0.500 BD</span>
                                     <span class="english-name">Espresso</span>
                                 </div>
-                                <button class="customize-btn" data-ar="تخصيص" data-en="Customize">تخصيص</button>
+                                <!-- قسم التحكم في المنتج -->
+                                <div class="product-controls">
+                                    <div class="control-item">
+                                        <label>عدد الشوتات:</label>
+                                        <input type="number" value="1" min="1" max="3">
+                                    </div>
+                                    <div class="control-item">
+                                        <label>القوة:</label>
+                                        <input type="range" min="1" max="5" value="3">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- سبانش لاتيه (ID: spanish_latte) -->
-                        <div class="menu-item" data-id="spanish_latte" data-category="hot">
+                        <div class="menu-item" data-category="hot">
                             <div class="menu-item-image">
                                 <img src="spanish_latte.jpg" alt="سبانش لاتيه">
                             </div>
                             <div class="menu-item-info">
-                                <h4 data-ar="سبانش لاتيه" data-en="Spanish Latte">سبانش لاتيه</h4>
-                                <p data-ar="لاتيه بنكهة الحليب المكثف" data-en="Latte with condensed milk flavor">لاتيه بنكهة الحليب المكثف</p>
+                                <h4>سبانش لاتيه</h4>
+                                <p>لاتيه بنكهة الحليب المكثف</p>
                                 <div class="menu-item-footer">
                                     <span class="price">1.500 BD</span>
                                     <span class="english-name">Spanish Latte</span>
                                 </div>
-                                <button class="customize-btn" data-ar="تخصيص" data-en="Customize">تخصيص</button>
+                                <div class="product-controls">
+                                    <div class="control-item">
+                                        <label>الحجم:</label>
+                                        <input type="text" value="وسط" readonly>
+                                    </div>
+                                    <div class="control-item">
+                                        <label>الحلاوة:</label>
+                                        <input type="range" min="1" max="5" value="3">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- كراميل لاتيه (ID: caramel_latte) -->
-                        <div class="menu-item" data-id="caramel_latte" data-category="hot">
+                        <div class="menu-item" data-category="hot">
                             <div class="menu-item-image">
                                 <img src="caramel_latte.jpg" alt="كراميل لاتيه">
                             </div>
                             <div class="menu-item-info">
-                                <h4 data-ar="كراميل لاتيه" data-en="Caramel Latte">كراميل لاتيه</h4>
-                                <p data-ar="لاتيه بنكهة الكراميل الغنية" data-en="Rich caramel flavored latte">لاتيه بنكهة الكراميل الغنية</p>
+                                <h4>كراميل لاتيه</h4>
+                                <p>لاتيه بنكهة الكراميل الغنية</p>
                                 <div class="menu-item-footer">
                                     <span class="price">1.500 BD</span>
                                     <span class="english-name">Caramel Latte</span>
                                 </div>
-                                <button class="customize-btn" data-ar="تخصيص" data-en="Customize">تخصيص</button>
+                                <div class="product-controls">
+                                    <div class="control-item">
+                                        <label>كمية الكراميل:</label>
+                                        <input type="range" min="1" max="5" value="3">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- لاتيه (ID: latte) -->
-                        <div class="menu-item" data-id="latte" data-category="hot">
+                        <div class="menu-item" data-category="hot">
                             <div class="menu-item-image">
                                 <img src="latte.jpg" alt="لاتيه">
                             </div>
                             <div class="menu-item-info">
-                                <h4 data-ar="لاتيه" data-en="Latte">لاتيه</h4>
-                                <p data-ar="اسبريسو مع حليب مبخر" data-en="Espresso with steamed milk">اسبريسو مع حليب مبخر</p>
+                                <h4>لاتيه</h4>
+                                <p>اسبريسو مع حليب مبخر</p>
                                 <div class="menu-item-footer">
                                     <span class="price">1.000 BD</span>
                                     <span class="english-name">Latte</span>
                                 </div>
-                                <button class="customize-btn" data-ar="تخصيص" data-en="Customize">تخصيص</button>
+                                <div class="product-controls">
+                                    <div class="control-item">
+                                        <label>درجة الحرارة:</label>
+                                        <input type="text" value="70°C">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- V60 (ID: v60) -->
-                        <div class="menu-item" data-id="v60" data-category="hot">
+                        <div class="menu-item" data-category="hot">
                             <div class="menu-item-image">
                                 <img src="v60.jpg" alt="V60">
                             </div>
                             <div class="menu-item-info">
-                                <h4 data-ar="V60" data-en="V60">V60</h4>
-                                <p data-ar="قهوة مفلترة بطريقة التقطير" data-en="Filtered coffee using the drip method">قهوة مفلترة بطريقة التقطير</p>
+                                <h4>V60</h4>
+                                <p>قهوة مفلترة بطريقة التقطير</p>
                                 <div class="menu-item-footer">
                                     <span class="price">1.000 BD</span>
                                     <span class="english-name">V60</span>
                                 </div>
-                                <button class="customize-btn" data-ar="تخصيص" data-en="Customize">تخصيص</button>
+                                <div class="product-controls">
+                                    <div class="control-item">
+                                        <label>نوع الحبة:</label>
+                                        <input type="text" value="أرابيكا">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -206,21 +232,25 @@
 
                 <!-- المشروبات الباردة -->
                 <div class="menu-category">
-                    <h3 data-ar="المشروبات الباردة" data-en="Cold Drinks">المشروبات الباردة</h3>
+                    <h3>المشروبات الباردة</h3>
                     <div class="menu-grid">
-                        <!-- كولد برو (ID: cold_brew) -->
-                        <div class="menu-item" data-id="cold_brew" data-category="cold">
+                        <div class="menu-item" data-category="cold">
                             <div class="menu-item-image">
                                 <img src="cold_brew.jpg" alt="كولد برو">
                             </div>
                             <div class="menu-item-info">
-                                <h4 data-ar="كولد برو" data-en="Cold Brew">كولد برو</h4>
-                                <p data-ar="قهوة باردة محضرة لمدة 24 ساعة" data-en="Cold coffee prepared for 24 hours">قهوة باردة محضرة لمدة 24 ساعة</p>
+                                <h4>كولد برو</h4>
+                                <p>قهوة باردة محضرة لمدة 24 ساعة</p>
                                 <div class="menu-item-footer">
                                     <span class="price">1.500 BD</span>
                                     <span class="english-name">Cold Brew</span>
                                 </div>
-                                <button class="customize-btn" data-ar="تخصيص" data-en="Customize">تخصيص</button>
+                                <div class="product-controls">
+                                    <div class="control-item">
+                                        <label>درجة البرودة:</label>
+                                        <input type="range" min="1" max="5" value="4">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -228,53 +258,65 @@
 
                 <!-- الشاي -->
                 <div class="menu-category">
-                    <h3 data-ar="الشاي" data-en="Tea">الشاي</h3>
+                    <h3>الشاي</h3>
                     <div class="menu-grid">
-                        <!-- شاي أحمر (ID: red_tea) -->
-                        <div class="menu-item" data-id="red_tea" data-category="tea">
+                        <div class="menu-item" data-category="tea">
                             <div class="menu-item-image">
                                 <img src="red_tea.jpg" alt="شاي أحمر">
                             </div>
                             <div class="menu-item-info">
-                                <h4 data-ar="شاي أحمر" data-en="Red Tea">شاي أحمر</h4>
-                                <p data-ar="شاي أحمر كلاسيكي" data-en="Classic red tea">شاي أحمر كلاسيكي</p>
+                                <h4>شاي أحمر</h4>
+                                <p>شاي أحمر كلاسيكي</p>
                                 <div class="menu-item-footer">
                                     <span class="price">0.200 BD</span>
                                     <span class="english-name">Red Tea</span>
                                 </div>
-                                <button class="customize-btn" data-ar="تخصيص" data-en="Customize">تخصيص</button>
+                                <div class="product-controls">
+                                    <div class="control-item">
+                                        <label>درجة النقاوة:</label>
+                                        <input type="range" min="1" max="5" value="3">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- شاي نعناع (ID: mint_tea) -->
-                        <div class="menu-item" data-id="mint_tea" data-category="tea">
+                        <div class="menu-item" data-category="tea">
                             <div class="menu-item-image">
                                 <img src="mint_tea.jpg" alt="شاي نعناع">
                             </div>
                             <div class="menu-item-info">
-                                <h4 data-ar="شاي نعناع" data-en="Mint Tea">شاي نعناع</h4>
-                                <p data-ar="شاي أحمر مع النعناع المنعش" data-en="Red tea with refreshing mint">شاي أحمر مع النعناع المنعش</p>
+                                <h4>شاي نعناع</h4>
+                                <p>شاي أحمر مع النعناع المنعش</p>
                                 <div class="menu-item-footer">
                                     <span class="price">0.200 BD</span>
                                     <span class="english-name">Mint Tea</span>
                                 </div>
-                                <button class="customize-btn" data-ar="تخصيص" data-en="Customize">تخصيص</button>
+                                <div class="product-controls">
+                                    <div class="control-item">
+                                        <label>كمية النعناع:</label>
+                                        <input type="range" min="1" max="5" value="3">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- شاي كرك (ID: karak_tea) -->
-                        <div class="menu-item" data-id="karak_tea" data-category="tea">
+                        <div class="menu-item" data-category="tea">
                             <div class="menu-item-image">
                                 <img src="karak_tea.jpg" alt="شاي كرك">
                             </div>
                             <div class="menu-item-info">
-                                <h4 data-ar="شاي كرك" data-en="Karak Tea">شاي كرك</h4>
-                                <p data-ar="شاي هندي بالتوابل والحليب" data-en="Indian tea with spices and milk">شاي هندي بالتوابل والحليب</p>
+                                <h4>شاي كرك</h4>
+                                <p>شاي هندي بالتوابل والحليب</p>
                                 <div class="menu-item-footer">
                                     <span class="price">0.200 BD</span>
                                     <span class="english-name">Karak Tea</span>
                                 </div>
-                                <button class="customize-btn" data-ar="تخصيص" data-en="Customize">تخصيص</button>
+                                <div class="product-controls">
+                                    <div class="control-item">
+                                        <label>درجة البهارات:</label>
+                                        <input type="range" min="1" max="5" value="3">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -288,17 +330,17 @@
             <div class="footer-content">
                 <div class="footer-logo">
                     <h2>Lovista café</h2>
-                    <p data-ar="تجربة سايبر لفنون القهوة" data-en="A cyber experience for the art of coffee">تجربة سايبر لفنون القهوة</p>
+                    <p>تجربة سايبر لفنون القهوة</p>
                 </div>
                 <div class="footer-info">
                     <div class="contact-info">
-                        <h3 data-ar="للتواصل" data-en="Contact Us">للتواصل</h3>
+                        <h3>للتواصل</h3>
                         <p><i class="fas fa-phone"></i>66661030</p>
-                        <p><i class="fas fa-map-marker-alt"></i> <span data-ar="العنوان: مدينة حمد، البحرين" data-en="Address: Hamad Town, Bahrain">العنوان: مدينة حمد، البحرين</span></p>
+                        <p><i class="fas fa-map-marker-alt"></i> العنوان: مدينة حمد، البحرين</p>
                     </div>
                     <div class="opening-hours">
-                        <h3 data-ar="ساعات العمل" data-en="Opening Hours">ساعات العمل</h3>
-                        <p data-ar="نتشرف بخدمتكم يومياً من الساعة 7 صباحاً حتى 11 مساءً" data-en="We are pleased to serve you daily from 7 AM to 11 PM">نتشرف بخدمتكم يومياً من الساعة 7 صباحاً حتى 11 مساءً</p>
+                        <h3>ساعات العمل</h3>
+                        <p>نتشرف بخدمتكم يومياً من الساعة 7 صباحاً حتى 11 مساءً</p>
                     </div>
                 </div>
                 <div class="social-links">
@@ -308,12 +350,11 @@
                 </div>
             </div>
             <div class="copyright">
-                <p data-ar="جميع الحقوق محفوظة &copy; 2025 Lovista café | تصميم سايبر" data-en="All Rights Reserved &copy; 2025 Lovista café | Cyber Design">جميع الحقوق محفوظة &copy; 2025 Lovista café | تصميم سايبر</p>
+                <p>جميع الحقوق محفوظة &copy; 2025 Lovista café | تصميم سايبر</p>
             </div>
         </div>
     </footer>
 
     <script src="script.js"></script>
-</body
-    </html>
-                                                                     
+</body>
+                    </html>
