@@ -1,444 +1,468 @@
-const menuItemsData = {
-    espresso: {
-        ar: { name: "اسبريسو", description: "قهوة مركزة بنكهة قوية" },
-        en: { name: "Espresso", description: "Concentrated coffee with a strong flavor" },
-        image: "espresso.jpg",
-        isEspresso: true,
-        prices: {
-            single: 0.500,
-            double: 0.800
-        }
-    },
-    spanish_latte: {
-        ar: { name: "سبانش لاتيه", description: "لاتيه بنكهة الحليب المكثف" },
-        en: { name: "Spanish Latte", description: "Latte with condensed milk flavor" },
-        image: "spanish_latte.jpg",
-        isEspresso: false,
-        prices: {
-            small: 1.500,
-            medium: 1.800,
-            large: 2.100
-        }
-    },
-    caramel_latte: {
-        ar: { name: "كراميل لاتيه", description: "لاتيه بنكهة الكراميل الغنية" },
-        en: { name: "Caramel Latte", description: "Rich caramel flavored latte" },
-        image: "caramel_latte.jpg",
-        isEspresso: false,
-        prices: {
-            small: 1.500,
-            medium: 1.800,
-            large: 2.100
-        }
-    },
-    latte: {
-        ar: { name: "لاتيه", description: "اسبريسو مع حليب مبخر" },
-        en: { name: "Latte", description: "Espresso with steamed milk" },
-        image: "latte.jpg",
-        isEspresso: false,
-        prices: {
-            small: 1.000,
-            medium: 1.300,
-            large: 1.600
-        }
-    },
-    v60: {
-        ar: { name: "V60", description: "قهوة مفلترة بطريقة التقطير" },
-        en: { name: "V60", description: "Filtered coffee using the drip method" },
-        image: "v60.jpg",
-        isEspresso: false,
-        prices: {
-            small: 1.000,
-            medium: 1.300,
-            large: 1.600
-        }
-    },
-    cold_brew: {
-        ar: { name: "كولد برو", description: "قهوة باردة محضرة لمدة 24 ساعة" },
-        en: { name: "Cold Brew", description: "Cold coffee prepared for 24 hours" },
-        image: "cold_brew.jpg",
-        isEspresso: false,
-        prices: {
-            small: 1.500,
-            medium: 1.800,
-            large: 2.100
-        }
-    },
-    red_tea: {
-        ar: { name: "شاي أحمر", description: "شاي أحمر كلاسيكي" },
-        en: { name: "Red Tea", description: "Classic red tea" },
-        image: "red_tea.jpg",
-        isEspresso: false,
-        prices: {
-            small: 0.200,
-            medium: 0.400,
-            large: 0.600
-        }
-    },
-    mint_tea: {
-        ar: { name: "شاي نعناع", description: "شاي أحمر مع النعناع المنعش" },
-        en: { name: "Mint Tea", description: "Red tea with refreshing mint" },
-        image: "mint_tea.jpg",
-        isEspresso: false,
-        prices: {
-            small: 0.200,
-            medium: 0.400,
-            large: 0.600
-        }
-    },
-    karak_tea: {
-        ar: { name: "شاي كرك", description: "شاي هندي بالتوابل والحليب" },
-        en: { name: "Karak Tea", description: "Indian tea with spices and milk" },
-        image: "karak_tea.jpg",
-        isEspresso: false,
-        prices: {
-            small: 0.200,
-            medium: 0.400,
-            large: 0.600
-        }
-    }
-};
-
-// الإضافات المتاحة
-const addonsData = {
-    ar: {
-        extra_shot: { name: "شوت إضافي", price: 0.300 },
-        oat_milk: { name: "حليب الشوفان", price: 0.400 },
-        extra_syrup: { name: "شراب إضافي (نكهة)", price: 0.200 },
-        whipped_cream: { name: "كريمة مخفوقة", price: 0.250 }
-    },
-    en: {
-        extra_shot: { name: "Extra Shot", price: 0.300 },
-        oat_milk: { name: "Oat Milk", price: 0.400 },
-        extra_syrup: { name: "Extra Syrup (Flavor)", price: 0.200 },
-        whipped_cream: { name: "Whipped Cream", price: 0.250 }
-    }
-};
-
-// حالة التخصيص الحالية
-let currentItem = null;
-let currentPrice = 0;
-let currentLang = 'ar'; // اللغة الافتراضية
-
-// العناصر الرئيسية في الـ DOM
-const popupOverlay = document.getElementById('popup-overlay');
-const closePopupBtn = document.querySelector('.close-popup');
-const sizeOptionsDiv = document.getElementById('size-options');
-const espressoOptionsDiv = document.getElementById('espresso-options');
-const addonsOptionsDiv = document.getElementById('addon-options');
-const finalPriceSpan = document.getElementById('final-price');
-const sizesSection = document.getElementById('sizes-section');
-const espressoSection = document.getElementById('espresso-section');
-const customizeButtons = document.querySelectorAll('.customize-btn');
-const languageBtn = document.getElementById('language-btn');
-
-// =================================================
-// 1. وظائف التحكم في السعر
-// =================================================
-
-function formatPrice(price) {
-    return price.toFixed(3) + ' BD';
-}
-
-function calculateFinalPrice() {
-    if (!currentItem) return;
-
-    let basePrice = 0;
+// انتظار تحميل المستند بالكامل
+document.addEventListener('DOMContentLoaded', function() {
+    // تهيئة المتغيرات
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const menuItems = document.querySelectorAll('.menu-item');
+    const languageBtn = document.querySelector('.language-btn');
+    const popupOverlay = document.getElementById('popup-overlay');
+    const closePopupBtn = document.querySelector('.close-popup');
     
-    // 1. حساب سعر الحجم/الشوت
-    const selectedSizeElement = sizeOptionsDiv.querySelector('.size-option.selected');
-    const selectedShotElement = espressoOptionsDiv.querySelector('.espresso-option.selected');
-
-    if (currentItem.isEspresso && selectedShotElement) {
-        const shotType = selectedShotElement.dataset.shot;
-        basePrice = currentItem.prices[shotType];
-    } else if (!currentItem.isEspresso && selectedSizeElement) {
-        const size = selectedSizeElement.dataset.size;
-        basePrice = currentItem.prices[size];
-    }
-
-    // 2. حساب سعر الإضافات
-    let addonsTotal = 0;
-    const selectedAddons = addonsOptionsDiv.querySelectorAll('input[type="checkbox"]:checked');
-    
-    selectedAddons.forEach(checkbox => {
-        const addonKey = checkbox.dataset.addon;
-        addonsTotal += addonsData[currentLang][addonKey].price;
-    });
-
-    currentPrice = basePrice + addonsTotal;
-    finalPriceSpan.textContent = formatPrice(currentPrice);
-}
-
-// =================================================
-// 2. وظائف بناء الـ Popup
-// =================================================
-
-function renderSizeOptions(item) {
-    sizeOptionsDiv.innerHTML = '';
-    const sizes = ['small', 'medium', 'large'];
-    const sizeNames = {
-        small: currentLang === 'ar' ? 'صغير' : 'Small',
-        medium: currentLang === 'ar' ? 'وسط' : 'Medium',
-        large: currentLang === 'ar' ? 'كبير' : 'Large'
+    // بيانات المنتجات مع الأسعار
+    const productsData = {
+        'اسبريسو': {
+            name: { ar: 'اسبريسو', en: 'Espresso' },
+            description: { ar: 'قهوة مركزة بنكهة قوية', en: 'Strong concentrated coffee' },
+            image: 'espresso.jpg',
+            category: 'hot',
+            type: 'espresso',
+            prices: {
+                'single': { price: 0.500, display: 'Single Shot = 0.500 BD' },
+                'double': { price: 0.800, display: 'Double Shot = 0.800 BD' }
+            },
+            basePrice: 0.500
+        },
+        'سبانش لاتيه': {
+            name: { ar: 'سبانش لاتيه', en: 'Spanish Latte' },
+            description: { ar: 'لاتيه بنكهة الحليب المكثف', en: 'Latte with condensed milk flavor' },
+            image: 'spanish_latte.jpg',
+            category: 'hot',
+            type: 'normal',
+            prices: {
+                'small': { price: 1.500, display: 'Small = 1.500 BD' },
+                'medium': { price: 1.800, display: 'Medium = 1.800 BD' },
+                'large': { price: 2.100, display: 'Large = 2.100 BD' }
+            },
+            basePrice: 1.500
+        },
+        'كراميل لاتيه': {
+            name: { ar: 'كراميل لاتيه', en: 'Caramel Latte' },
+            description: { ar: 'لاتيه بنكهة الكراميل الغنية', en: 'Latte with rich caramel flavor' },
+            image: 'caramel_latte.jpg',
+            category: 'hot',
+            type: 'normal',
+            prices: {
+                'small': { price: 1.500, display: 'Small = 1.500 BD' },
+                'medium': { price: 1.800, display: 'Medium = 1.800 BD' },
+                'large': { price: 2.100, display: 'Large = 2.100 BD' }
+            },
+            basePrice: 1.500
+        },
+        'لاتيه': {
+            name: { ar: 'لاتيه', en: 'Latte' },
+            description: { ar: 'اسبريسو مع حليب مبخر', en: 'Espresso with steamed milk' },
+            image: 'latte.jpg',
+            category: 'hot',
+            type: 'normal',
+            prices: {
+                'small': { price: 1.000, display: 'Small = 1.000 BD' },
+                'medium': { price: 1.300, display: 'Medium = 1.300 BD' },
+                'large': { price: 1.600, display: 'Large = 1.600 BD' }
+            },
+            basePrice: 1.000
+        },
+        'V60': {
+            name: { ar: 'V60', en: 'V60' },
+            description: { ar: 'قهوة مفلترة بطريقة التقطير', en: 'Filter coffee using drip method' },
+            image: 'v60.jpg',
+            category: 'hot',
+            type: 'normal',
+            prices: {
+                'small': { price: 1.000, display: 'Small = 1.000 BD' },
+                'medium': { price: 1.300, display: 'Medium = 1.300 BD' },
+                'large': { price: 1.600, display: 'Large = 1.600 BD' }
+            },
+            basePrice: 1.000
+        },
+        'كولد برو': {
+            name: { ar: 'كولد برو', en: 'Cold Brew' },
+            description: { ar: 'قهوة باردة محضرة لمدة 24 ساعة', en: 'Cold coffee prepared for 24 hours' },
+            image: 'cold_brew.jpg',
+            category: 'cold',
+            type: 'normal',
+            prices: {
+                'small': { price: 1.500, display: 'Small = 1.500 BD' },
+                'medium': { price: 1.800, display: 'Medium = 1.800 BD' },
+                'large': { price: 2.100, display: 'Large = 2.100 BD' }
+            },
+            basePrice: 1.500
+        },
+        'شاي أحمر': {
+            name: { ar: 'شاي أحمر', en: 'Red Tea' },
+            description: { ar: 'شاي أحمر كلاسيكي', en: 'Classic red tea' },
+            image: 'red_tea.jpg',
+            category: 'tea',
+            type: 'normal',
+            prices: {
+                'small': { price: 0.200, display: 'Small = 0.200 BD' },
+                'medium': { price: 0.400, display: 'Medium = 0.400 BD' },
+                'large': { price: 0.600, display: 'Large = 0.600 BD' }
+            },
+            basePrice: 0.200
+        },
+        'شاي نعناع': {
+            name: { ar: 'شاي نعناع', en: 'Mint Tea' },
+            description: { ar: 'شاي أحمر مع النعناع المنعش', en: 'Red tea with refreshing mint' },
+            image: 'mint_tea.jpg',
+            category: 'tea',
+            type: 'normal',
+            prices: {
+                'small': { price: 0.200, display: 'Small = 0.200 BD' },
+                'medium': { price: 0.400, display: 'Medium = 0.400 BD' },
+                'large': { price: 0.600, display: 'Large = 0.600 BD' }
+            },
+            basePrice: 0.200
+        },
+        'شاي كرك': {
+            name: { ar: 'شاي كرك', en: 'Karak Tea' },
+            description: { ar: 'شاي هندي بالتوابل والحليب', en: 'Indian tea with spices and milk' },
+            image: 'karak_tea.jpg',
+            category: 'tea',
+            type: 'normal',
+            prices: {
+                'small': { price: 0.200, display: 'Small = 0.200 BD' },
+                'medium': { price: 0.400, display: 'Medium = 0.400 BD' },
+                'large': { price: 0.600, display: 'Large = 0.600 BD' }
+            },
+            basePrice: 0.200
+        }
     };
 
-    sizes.forEach(size => {
-        const price = item.prices[size];
-        if (price !== undefined) {
-            const div = document.createElement('div');
-            div.className = 'size-option';
-            div.dataset.size = size;
-            div.innerHTML = `
-                <span>${sizeNames[size]}</span>
-                <span>${formatPrice(price)}</span>
-            `;
-            div.addEventListener('click', () => {
-                // إزالة التحديد من الجميع
-                sizeOptionsDiv.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
-                // تحديد العنصر الحالي
-                div.classList.add('selected');
-                calculateFinalPrice();
-            });
-            sizeOptionsDiv.appendChild(div);
-        }
-    });
+    // الإضافات مع الأسعار
+    const addonsData = [
+        { id: 'extra-shot', name: { ar: 'شوت إضافي', en: 'Extra Shot' }, price: 0.300 },
+        { id: 'extra-syrup', name: { ar: 'شراب إضافي', en: 'Extra Syrup' }, price: 0.200 },
+        { id: 'whipped-cream', name: { ar: 'قشدة مخفوقة', en: 'Whipped Cream' }, price: 0.250 },
+        { id: 'caramel-drizzle', name: { ar: 'كراميل إضافي', en: 'Caramel Drizzle' }, price: 0.200 },
+        { id: 'chocolate-chips', name: { ar: 'رقائق شوكولاتة', en: 'Chocolate Chips' }, price: 0.300 }
+    ];
 
-    // تحديد الحجم الأصغر كافتراضي
-    const defaultSize = sizeOptionsDiv.querySelector('.size-option');
-    if (defaultSize) {
-        defaultSize.classList.add('selected');
-    }
-}
+    // حالة التطبيق
+    let currentLanguage = 'ar';
+    let currentProduct = null;
+    let selectedSize = null;
+    let selectedEspresso = null;
+    let selectedAddons = [];
 
-function renderEspressoOptions(item) {
-    espressoOptionsDiv.innerHTML = '';
-    const shots = ['single', 'double'];
-    const shotNames = {
-        single: currentLang === 'ar' ? 'شوت واحد' : 'Single Shot',
-        double: currentLang === 'ar' ? 'شوت مزدوج' : 'Double Shot'
-    };
-
-    shots.forEach(shot => {
-        const price = item.prices[shot];
-        if (price !== undefined) {
-            const div = document.createElement('div');
-            div.className = 'espresso-option';
-            div.dataset.shot = shot;
-            div.innerHTML = `
-                <span>${shotNames[shot]}</span>
-                <span>${formatPrice(price)}</span>
-            `;
-            div.addEventListener('click', () => {
-                espressoOptionsDiv.querySelectorAll('.espresso-option').forEach(opt => opt.classList.remove('selected'));
-                div.classList.add('selected');
-                calculateFinalPrice();
-            });
-            espressoOptionsDiv.appendChild(div);
-        }
-    });
-
-    // تحديد الشوت الافتراضي
-    const defaultShot = espressoOptionsDiv.querySelector('.espresso-option');
-    if (defaultShot) {
-        defaultShot.classList.add('selected');
-    }
-}
-
-function renderAddons() {
-    addonsOptionsDiv.innerHTML = '';
-    const addons = addonsData[currentLang];
-
-    for (const key in addons) {
-        const addon = addons[key];
-        const div = document.createElement('div');
-        div.className = 'addon-item';
-        div.innerHTML = `
-            <label for="addon-${key}">${addon.name}</label>
-            <span class="addon-price">+${formatPrice(addon.price)}</span>
-            <input type="checkbox" id="addon-${key}" data-addon="${key}">
-        `;
-        const checkbox = div.querySelector('input');
-        checkbox.addEventListener('change', calculateFinalPrice);
-        addonsOptionsDiv.appendChild(div);
-    }
-}
-
-function openPopup(itemId) {
-    currentItem = menuItemsData[itemId];
-    if (!currentItem) return;
-
-    // تحديث محتوى الـ Popup
-    document.getElementById('popup-image').src = currentItem.image;
-    document.getElementById('popup-title').textContent = currentItem[currentLang].name;
-    document.getElementById('popup-description').textContent = currentItem[currentLang].description;
-
-    // إظهار وإخفاء أقسام الأحجام/الشوتات
-    if (currentItem.isEspresso) {
-        sizesSection.style.display = 'none';
-        espressoSection.style.display = 'block';
-        renderEspressoOptions(currentItem);
-    } else {
-        sizesSection.style.display = 'block';
-        espressoSection.style.display = 'none';
-        renderSizeOptions(currentItem);
+    // التحقق من وجود تفضيل للوضع المظلم في التخزين المحلي
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
     }
 
-    // عرض الإضافات
-    renderAddons();
-    
-    // حساب السعر الأولي
-    calculateFinalPrice();
-
-    // إظهار الـ Popup
-    popupOverlay.classList.add('active');
-}
-
-function closePopup() {
-    popupOverlay.classList.remove('active');
-    currentItem = null;
-    currentPrice = 0;
-}
-
-// =================================================
-// 3. وظائف التحكم في اللغة
-// =================================================
-
-const translations = {
-    ar: {
-        'Customize': 'تخصيص',
-        'All': 'الكل',
-        'Hot': 'ساخنة',
-        'Cold': 'باردة',
-        'Tea': 'شاي',
-        'Choose Size': 'اختر الحجم',
-        'Choose Shots': 'اختر عدد الشوتات',
-        'Optional Addons': 'الإضافات الاختيارية',
-        'Final Price': 'السعر النهائي',
-        'Add to Cart': 'أضف إلى السلة',
-        'Welcome to': 'مرحباً بكم في',
-        'Cyber Experience': 'تجربة سايبر لمذاق لا ينسى',
-        'Follow us on Instagram': 'تابعنا على إنستغرام',
-        'Hot Drinks': 'المشروبات الساخنة',
-        'Cold Drinks': 'المشروبات الباردة',
-        'Opening Hours': 'ساعات العمل',
-        'Contact Us': 'للتواصل',
-        'Address: Hamad Town, Bahrain': 'العنوان: مدينة حمد، البحرين',
-        'We are pleased to serve you daily from 7 AM to 11 PM': 'نتشرف بخدمتكم يومياً من الساعة 7 صباحاً حتى 11 مساءً',
-        'All Rights Reserved &copy; 2025 Lovista café | Cyber Design': 'جميع الحقوق محفوظة &copy; 2025 Lovista café | تصميم سايبر'
-    },
-    en: {
-        'تخصيص': 'Customize',
-        'الكل': 'All',
-        'ساخنة': 'Hot',
-        'باردة': 'Cold',
-        'شاي': 'Tea',
-        'اختر الحجم': 'Choose Size',
-        'اختر عدد الشوتات': 'Choose Shots',
-        'الإضافات الاختيارية': 'Optional Addons',
-        'السعر النهائي': 'Final Price',
-        'أضف إلى السلة': 'Add to Cart',
-        'مرحباً بكم في': 'Welcome to',
-        'تجربة سايبر لمذاق لا ينسى': 'A Cyber Experience for an Unforgettable Taste',
-        'تابعنا على إنستغرام': 'Follow us on Instagram',
-        'المشروبات الساخنة': 'Hot Drinks',
-        'المشروبات الباردة': 'Cold Drinks',
-        'ساعات العمل': 'Opening Hours',
-        'للتواصل': 'Contact Us',
-        'العنوان: مدينة حمد، البحرين': 'Address: Hamad Town, Bahrain',
-        'نتشرف بخدمتكم يومياً من الساعة 7 صباحاً حتى 11 مساءً': 'We are pleased to serve you daily from 7 AM to 11 PM',
-        'جميع الحقوق محفوظة &copy; 2025 Lovista café | تصميم سايبر': 'All Rights Reserved &copy; 2025 Lovista café | Cyber Design'
-    }
-};
-
-function switchLanguage(lang) {
-    currentLang = lang;
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-
-    // تحديث النصوص باستخدام data attributes
-    document.querySelectorAll('[data-ar]').forEach(element => {
-        const arText = element.getAttribute('data-ar');
-        const enText = element.getAttribute('data-en');
+    // تبديل الوضع المظلم/الفاتح
+    themeToggleBtn.addEventListener('click', function() {
+        document.body.classList.toggle('dark-theme');
         
-        if (lang === 'ar') {
-            element.innerHTML = arText;
+        // حفظ التفضيل في التخزين المحلي
+        if (document.body.classList.contains('dark-theme')) {
+            localStorage.setItem('theme', 'dark');
         } else {
-            element.innerHTML = enText;
+            localStorage.setItem('theme', 'light');
         }
     });
 
-    // تحديث نصوص الأزرار التي ليس لديها data attributes
-    languageBtn.querySelector('.lang-text').textContent = lang === 'ar' ? 'EN' : 'AR';
-    
-    // تحديث نصوص الـ Popup إذا كانت مفتوحة
-    if (popupOverlay.classList.contains('active')) {
-        // إعادة فتح الـ popup لتحديث المحتوى الداخلي (الأحجام والإضافات)
-        openPopup(currentItem.id); 
-    }
-}
-
-// =================================================
-// 4. وظائف الفلترة
-// =================================================
-
-function filterMenu(category) {
-    const items = document.querySelectorAll('.menu-item');
-    items.forEach(item => {
-        if (category === 'all' || item.dataset.category === category) {
-            item.style.display = 'block';
-        } else {
-            item.style.display = 'none';
-        }
+    // تبديل اللغة
+    languageBtn.addEventListener('click', function() {
+        currentLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
+        updateLanguage();
     });
-}
 
-// =================================================
-// 5. تهيئة المستمعات (Event Listeners)
-// =================================================
-
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. مستمعات أزرار التخصيص (Popup)
-    customizeButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            const itemId = e.currentTarget.closest('.menu-item').dataset.id;
-            // حفظ الـ ID في حالة التخصيص
-            currentItem.id = itemId; 
-            openPopup(itemId);
+    // تصفية المنتجات حسب الفئة
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // إزالة الفئة النشطة من جميع الأزرار
+            filterBtns.forEach(b => b.classList.remove('active'));
+            
+            // إضافة الفئة النشطة للزر المحدد
+            this.classList.add('active');
+            
+            const filterValue = this.getAttribute('data-filter');
+            
+            // تصفية العناصر
+            menuItems.forEach(item => {
+                if (filterValue === 'all') {
+                    item.style.display = 'block';
+                } else if (item.getAttribute('data-category') === filterValue) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         });
     });
 
-    // 2. إغلاق الـ Popup
+    // إضافة تأثيرات التمرير
+    const addScrollAnimation = () => {
+        const elements = document.querySelectorAll('.menu-item, .welcome, .menu-category h3');
+        
+        elements.forEach(element => {
+            const elementPosition = element.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight / 1.3;
+            
+            if (elementPosition < screenPosition) {
+                element.classList.add('animate');
+            }
+        });
+    };
+
+    // إضافة فئة CSS للتحريك
+    const style = document.createElement('style');
+    style.textContent = `
+        .menu-item, .welcome, .menu-category h3 {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .menu-item.animate, .welcome.animate, .menu-category h3.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .menu-item:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+        
+        .menu-item:nth-child(3) {
+            transition-delay: 0.2s;
+        }
+        
+        .menu-item:nth-child(4) {
+            transition-delay: 0.3s;
+        }
+        
+        .menu-item:nth-child(5) {
+            transition-delay: 0.4s;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // تشغيل التحريك عند التمرير
+    window.addEventListener('scroll', addScrollAnimation);
+    
+    // تشغيل التحريك عند تحميل الصفحة
+    addScrollAnimation();
+
+    // إضافة نقرة على عناصر القائمة لفتح popup
+    menuItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const productName = this.querySelector('h4').textContent;
+            currentProduct = productsData[productName];
+            
+            if (currentProduct) {
+                openProductPopup(currentProduct);
+            }
+        });
+    });
+
+    // إغلاق popup
     closePopupBtn.addEventListener('click', closePopup);
-    popupOverlay.addEventListener('click', (e) => {
+    popupOverlay.addEventListener('click', function(e) {
         if (e.target === popupOverlay) {
             closePopup();
         }
     });
 
-    // 3. فلترة القائمة
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            filterMenu(e.target.dataset.filter);
+    // فتح popup المنتج
+    function openProductPopup(product) {
+        currentProduct = product;
+        selectedSize = null;
+        selectedEspresso = null;
+        selectedAddons = [];
+        
+        // تحديث محتوى popup
+        document.getElementById('popup-image').src = product.image;
+        document.getElementById('popup-title').textContent = product.name[currentLanguage];
+        document.getElementById('popup-description').textContent = product.description[currentLanguage];
+        
+        // إعداد قسم الأحجام
+        const sizesSection = document.getElementById('sizes-section');
+        const espressoSection = document.getElementById('espresso-section');
+        
+        if (product.type === 'espresso') {
+            sizesSection.style.display = 'none';
+            espressoSection.style.display = 'block';
+            setupEspressoOptions(product);
+        } else {
+            sizesSection.style.display = 'block';
+            espressoSection.style.display = 'none';
+            setupSizeOptions(product);
+        }
+        
+        // إعداد الإضافات
+        setupAddonsOptions();
+        
+        // تحديث السعر
+        updatePrice();
+        
+        // إظهار popup
+        popupOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // إعداد خيارات الأحجام
+    function setupSizeOptions(product) {
+        const sizeOptions = document.getElementById('size-options');
+        sizeOptions.innerHTML = '';
+        
+        Object.entries(product.prices).forEach(([size, data]) => {
+            const button = document.createElement('button');
+            button.className = 'size-btn';
+            button.innerHTML = `
+                <span>${size === 'small' ? 'صغير' : size === 'medium' ? 'وسط' : 'كبير'}</span>
+                <span>${data.price.toFixed(3)} BD</span>
+            `;
+            
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+                selectedSize = size;
+                updatePrice();
+            });
+            
+            sizeOptions.appendChild(button);
+        });
+    }
+
+    // إعداد خيارات الإسبريسو
+    function setupEspressoOptions(product) {
+        const espressoOptions = document.getElementById('espresso-options');
+        espressoOptions.innerHTML = '';
+        
+        Object.entries(product.prices).forEach(([type, data]) => {
+            const button = document.createElement('button');
+            button.className = 'espresso-btn';
+            button.innerHTML = `
+                <span>${type === 'single' ? 'شوت واحد' : 'شوتين'}</span>
+                <span>${data.price.toFixed(3)} BD</span>
+            `;
+            
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.espresso-btn').forEach(btn => btn.classList.remove('selected'));
+                button.classList.add('selected');
+                selectedEspresso = type;
+                updatePrice();
+            });
+            
+            espressoOptions.appendChild(button);
+        });
+    }
+
+    // إعداد خيارات الإضافات
+    function setupAddonsOptions() {
+        const addonOptions = document.getElementById('addon-options');
+        addonOptions.innerHTML = '';
+        
+        addonsData.forEach(addon => {
+            const div = document.createElement('div');
+            div.className = 'addon-checkbox';
+            div.innerHTML = `
+                <label>
+                    <input type="checkbox" id="${addon.id}" value="${addon.price}">
+                    <span>${addon.name[currentLanguage]}</span>
+                    <span style="margin-left: auto;">+${addon.price.toFixed(3)} BD</span>
+                </label>
+            `;
+            
+            const checkbox = div.querySelector('input');
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    selectedAddons.push({ id: addon.id, price: addon.price });
+                } else {
+                    selectedAddons = selectedAddons.filter(a => a.id !== addon.id);
+                }
+                updatePrice();
+            });
+            
+            addonOptions.appendChild(div);
+        });
+    }
+
+    // تحديث السعر
+    function updatePrice() {
+        let totalPrice = 0;
+        
+        if (currentProduct) {
+            if (currentProduct.type === 'espresso' && selectedEspresso) {
+                totalPrice = currentProduct.prices[selectedEspresso].price;
+            } else if (selectedSize) {
+                totalPrice = currentProduct.prices[selectedSize].price;
+            } else {
+                totalPrice = currentProduct.basePrice;
+            }
+            
+            // إضافة أسعار الإضافات
+            selectedAddons.forEach(addon => {
+                totalPrice += addon.price;
+            });
+        }
+        
+        document.getElementById('final-price').textContent = totalPrice.toFixed(3) + ' BD';
+    }
+
+    // إغلاق popup
+    function closePopup() {
+        popupOverlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        
+        // إعادة تعيين القيم
+        selectedSize = null;
+        selectedEspresso = null;
+        selectedAddons = [];
+        
+        // إلغاء تحديد جميع خانات الاختيار
+        document.querySelectorAll('.addon-checkbox input').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+    }
+
+    // تحديث اللغة
+    function updateLanguage() {
+        // تحديث نص زر اللغة
+        const langIcon = languageBtn.querySelector('i');
+        const langText = languageBtn.querySelector('.lang-text');
+        
+        if (currentLanguage === 'ar') {
+            langIcon.className = 'fas fa-language';
+            langText.textContent = 'EN';
+            document.dir = 'rtl';
+        } else {
+            langIcon.className = 'fas fa-language';
+            langText.textContent = 'AR';
+            document.dir = 'ltr';
+        }
+        
+        // تحديث النصوص في popup إذا كان مفتوحاً
+        if (currentProduct && popupOverlay.classList.contains('active')) {
+            document.getElementById('popup-title').textContent = currentProduct.name[currentLanguage];
+            document.getElementById('popup-description').textContent = currentProduct.description[currentLanguage];
+            
+            // إعادة إعداد الإضافات
+            setupAddonsOptions();
+        }
+    }
+
+    // إضافة تأثير النقر على الأزرار
+    const buttons = document.querySelectorAll('.btn, .filter-btn, .size-btn, .espresso-btn');
+    
+    buttons.forEach(button => {
+        button.addEventListener('mousedown', function() {
+            this.style.transform = 'scale(0.95)';
+        });
+        
+        button.addEventListener('mouseup', function() {
+            this.style.transform = '';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = '';
         });
     });
 
-    // 4. تبديل اللغة
-    languageBtn.addEventListener('click', () => {
-        const current = languageBtn.dataset.lang;
-        const newLang = current === 'ar' ? 'en' : 'ar';
-        languageBtn.dataset.lang = newLang;
-        switchLanguage(newLang);
+    // زر إضافة إلى السلة
+    document.getElementById('add-to-cart-btn').addEventListener('click', function() {
+        alert(currentLanguage === 'ar' ? 'تمت إضافة المنتج إلى السلة!' : 'Product added to cart!');
+        closePopup();
     });
-
-    // 5. تبديل الثيم (لإبقاء وظيفة التبديل رغم أننا نستخدم الثيم الداكن افتراضياً)
-    const themeToggleBtn = document.getElementById('theme-toggle-btn');
-    themeToggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-theme');
-    });
-
-    // تطبيق اللغة الافتراضية عند التحميل
-    switchLanguage(currentLang);
 });
