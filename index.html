@@ -224,3 +224,141 @@
 
     </div>
 </section>
+<!-- POPUP -->
+<div id="productPopup" class="popup-overlay">
+
+    <div class="popup-box">
+
+        <span class="popup-close">✕</span>
+
+        <img id="popupImg" alt="Product Image">
+
+        <h2 id="popupTitle" data-ar="" data-en=""></h2>
+        <p id="popupDesc" data-ar="" data-en=""></p>
+
+        <!-- ESPRESSO ONLY -->
+        <div class="popup-section" id="espressoSection">
+            <h4 data-ar="نوع الاسبريسو" data-en="Espresso Type">نوع الاسبريسو</h4>
+
+            <div class="addons-group espresso-choice">
+                <label>
+                    <input type="radio" name="espresso-type" value="single" data-price="0.500" checked>
+                    <span data-ar="سنقل شوت (0.500 BD)" data-en="Single Shot (0.500 BD)">سنقل شوت (0.500 BD)</span>
+                </label>
+
+                <label>
+                    <input type="radio" name="espresso-type" value="double" data-price="0.800">
+                    <span data-ar="دبل شوت (0.800 BD)" data-en="Double Shot (0.800 BD)">دبل شوت (0.800 BD)</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- SIZES -->
+        <div class="popup-section" id="sizeSection">
+            <h4 data-ar="الحجم" data-en="Size">الحجم</h4>
+
+            <div class="sizes">
+                <label>
+                    <input type="radio" name="size" value="small">
+                    <span data-ar="صغير" data-en="Small">صغير</span>
+                </label>
+
+                <label>
+                    <input type="radio" name="size" value="medium" checked>
+                    <span data-ar="وسط" data-en="Medium">وسط</span>
+                </label>
+
+                <label>
+                    <input type="radio" name="size" value="large">
+                    <span data-ar="كبير" data-en="Large">كبير</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- FLAVOR SYRUPS -->
+        <div class="popup-section">
+            <h4 data-ar="إضافات النكهات" data-en="Flavor Syrups">إضافات النكهات</h4>
+
+            <div class="addons-group" id="syrups">
+                <label>
+                    <span data-ar="كراميل" data-en="Caramel">كراميل</span>
+                    <input type="checkbox" value="0.200">
+                </label>
+
+                <label>
+                    <span data-ar="فانيلا" data-en="Vanilla">فانيلا</span>
+                    <input type="checkbox" value="0.200">
+                </label>
+
+                <label>
+                    <span data-ar="بُن سكر" data-en="Brown Sugar">بُن سكر</span>
+                    <input type="checkbox" value="0.200">
+                </label>
+
+                <label>
+                    <span data-ar="توفي نت" data-en="Toffee Nut">توفي نت</span>
+                    <input type="checkbox" value="0.200">
+                </label>
+            </div>
+        </div>
+
+        <!-- MILK OPTIONS -->
+        <div class="popup-section">
+            <h4 data-ar="نوع الحليب" data-en="Milk Options">نوع الحليب</h4>
+
+            <div class="addons-group" id="milk">
+                <label>
+                    <span data-ar="عادي" data-en="Regular">عادي</span>
+                    <input type="radio" name="milk" value="0.000" checked>
+                </label>
+
+                <label>
+                    <span data-ar="شوفان" data-en="Oat Milk">شوفان</span>
+                    <input type="radio" name="milk" value="0.300">
+                </label>
+
+                <label>
+                    <span data-ar="لوز" data-en="Almond Milk">لوز</span>
+                    <input type="radio" name="milk" value="0.300">
+                </label>
+
+                <label>
+                    <span data-ar="حليب مكثف محلى" data-en="Sweet Condensed Milk">حليب مكثف محلى</span>
+                    <input type="radio" name="milk" value="0.200">
+                </label>
+            </div>
+        </div>
+
+        <!-- TOPPINGS -->
+        <div class="popup-section">
+            <h4 data-ar="إضافات علوية" data-en="Toppings">إضافات علوية</h4>
+
+            <div class="addons-group">
+                <label>
+                    <span data-ar="كريمة" data-en="Whipped Cream">كريمة</span>
+                    <input type="checkbox" value="0.200">
+                </label>
+
+                <label>
+                    <span data-ar="رشة قرفة" data-en="Cinnamon">رشة قرفة</span>
+                    <input type="checkbox" value="0.100">
+                </label>
+
+                <label>
+                    <span data-ar="كولد فوم" data-en="Cold Foam">كولد فوم</span>
+                    <input type="checkbox" value="0.200">
+                </label>
+            </div>
+        </div>
+
+        <!-- TOTAL PRICE -->
+        <div class="popup-section total">
+            <h3 data-ar="السعر النهائي" data-en="Final Price">السعر النهائي</h3>
+            <p id="popupPrice">0.000 BD</p>
+        </div>
+
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
