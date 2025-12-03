@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Menu</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="menu-item" onclick="openPopup(this)">
+  <div class="menu-item-image"><img src="karak_tea.jpg"></div>
+  <div class="menu-item-info"><h4>شاي كرك</h4><p>شاي هندي بالحليب</p></div>
+</div>
+
+<div class="popup-overlay" id="productPopup">
+<div class="popup-box">
+<span class="popup-close">x</span>
+<img id="popupImg" class="popup-img">
+<h2 id="popupTitle"></h2>
+<p id="popupDesc"></p>
+</div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
